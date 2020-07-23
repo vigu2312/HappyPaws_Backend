@@ -1,0 +1,133 @@
+const User = require('../models/User');
+const LoggedInUser = require('../models/LoggedInUser')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+// module.exports = (passport, jwt) => {
+    exports.register = (req, res, next) => {
+        try {
+            const { name, email, password } = req.body;
+            // Validations 
+            if (!name || !email || !password) {
+                return res.status(400).json({ msg: 'Please enter all the fields' });
+            }
+    
+            User.findOne({ email })
+                .then(user => {
+                    if (user) return res.status(400).json({ msg: 'User already exists' })
+                })
+    
+            const newUser = new User({
+                name, email, password
+            })
+    
+            // Create salt and hash
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                    if (err) throw err;
+                    newUser.password = hash;
+                    newUser.save()
+                        .then(user => {
+                            // JWT token
+                            jwt.sign(
+                                { id: user.id },
+                                process.env.JWT_SECRET,
+                                { expiresIn: 3600 },
+                                (err, token) => {
+                                    if (err) throw err;
+                                    const loggedInUser  = new LoggedInUser ({token});
+                                    loggedInUser.save()
+                                    res.json({
+                                        token,
+                                        user: {
+                                            id: user.id,
+                                            name: user.name,
+                                            email: user.email
+                                        }
+                                    });
+                                }
+                            )
+    
+                        });
+                });
+            });
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    
+    exports.login = (req, res, next) => {
+        try {
+            const { email, password } = req.body;
+            // Validations 
+            if (!email || !password) {
+                return res.status(400).json({ msg: 'Please enter all the fields' });
+            }
+    
+            User.findOne({ email })
+                .then(user => {
+                    if (!user) return res.status(400).json({ msg: 'User does not exist' })
+    
+                    bcrypt.compare(password, user.password)
+                        .then(isMatch => {
+                            if (!isMatch) return res.status(400).json({ mdg: 'Invalid credentials' })
+                            // JWT token
+                            jwt.sign(
+                                { id: user.id },
+                                process.env.JWT_SECRET,
+                                { expiresIn: 3600 },
+                                (err, token) => {
+                                    if (err) throw err;
+                                    const loggedInUser  = new LoggedInUser ({token});
+                                    loggedInUser.save()
+                                    res.status(200).json({
+                                        token,
+                                        user: {
+                                            id: user.id,
+                                            name: user.name,
+                                            email: user.email
+                                        }
+                                    });
+                                }
+                            )
+                        })
+                })
+    
+    
+    
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    
+    exports.userDetails = (req, res, next) => {
+        User.findById(req.user.id)
+            .select('-password')
+            .then(user => res.json(user));
+    }
+    
+    exports.logout = (req, res, next) => {
+
+        LoggedInUser.findOneAndDelete({token: req.token}, function(err) {
+            if (!err) {
+                   res.status(200).json({mssg: "OK", success: true});
+            }
+            else {
+                console.log(err);
+            }
+        });
+
+        // jwt.verify(req.token, process.env.JWT_SECRET, (err, authData) => {
+        //     console.log(err);
+        //     if (err) res.status(403).json({
+        //         success: false
+        //     });
+        //     else {
+        //         req.logout();
+        //         res.status(200).json({
+        //             success: true
+        //         })
+        //     }
+        // })
+    }
+    // return exports;
+// }
