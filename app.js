@@ -25,6 +25,7 @@ app.use(passport.session());
 app.use('/users', require('./routes/users'));
 app.use('/sharestory', require('./routes/shareyourstory'))
 app.use('/donation', require('./routes/donation'));
+app.use('/volunteer', require('./routes/volunteer.js'));
 app.get('/', (req, res) => res.send("Hello"));
 
 module.exports = app;
