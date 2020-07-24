@@ -2,6 +2,10 @@ const User = require('../models/User');
 const LoggedInUser = require('../models/LoggedInUser')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
+
 // module.exports = (passport, jwt) => {
 exports.register = (req, res, next) => {
     try {
@@ -162,6 +166,44 @@ exports.forgetPassword = (req, res, next) => {
 
     }
 }
+
+exports.forgetPasswordMail = (req, res, next) => {
+    const { email } = req.body
+    try {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+        var transporter = nodemailer.createTransport(smtpTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 589,
+            secure: false,
+            auth: {
+                user: 'happypaws5709@gmail.com',
+                pass: 'Webgroup6'
+            }
+        }))
+
+        var mailOptions = {
+            from: 'happypaws5709@gmail.com',
+            to: email,
+            subject: 'Reset your password : HappyPaws ',
+            html: 'Dear Customer,<br> Please navigate to the link to reset your password http://localhost:3000/forgetPassword',
+        };
+
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+            transporter.close();
+        });
+    }
+    catch (err) {
+        res.json({ message: err });
+    }
+
+};
 
 exports.editProfile = (req, res, next) => {
     try {
