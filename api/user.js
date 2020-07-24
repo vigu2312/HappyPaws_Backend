@@ -186,7 +186,7 @@ exports.forgetPasswordMail = (req, res, next) => {
             from: 'happypaws5709@gmail.com',
             to: email,
             subject: 'Reset your password : HappyPaws ',
-            html: 'Dear Customer,<br> Please navigate to the link to reset your password http://localhost:3000/forgetPassword',
+            html: 'Dear Customer,<br> Please navigate to the link to reset your password http://localhost:8080/forgetPassword',
         };
 
 
