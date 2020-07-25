@@ -18,14 +18,8 @@ function auth(req, res, next) {
             }
           }).catch(err => {
             console.log(err);
-            return;
+            return res.status(400).json({ success: false, })
           });
-          
-        // LoggedInUser.findOne({token}, function(err, result) {
-        //     if (!result) {
-        //         return  res.status(400).json({msg: 'Unvalid token'});
-        //     }
-        // })
     }
 
     try {
