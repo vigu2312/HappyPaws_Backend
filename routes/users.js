@@ -1,3 +1,9 @@
+/************
+ * Author: Moni Shah 
+ **********/
+
+ 
+ // Routes for User profile management feature
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth')
