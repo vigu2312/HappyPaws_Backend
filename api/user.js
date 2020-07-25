@@ -175,7 +175,7 @@ exports.forgetPassword = (req, res, next) => {
 
     }
 }
-
+/*Reference taken from https://www.w3schools.com/nodejs/nodejs_email.asp*/
 // POST API CALL: sending mail to reset a new password
 exports.forgetPasswordMail = (req, res, next) => {
 
@@ -203,7 +203,7 @@ exports.forgetPasswordMail = (req, res, next) => {
             from: 'happypaws5709@gmail.com',
             to: email,
             subject: 'Reset your password : HappyPaws ',
-            html: 'Dear Customer,<br> Please navigate to the link to reset your password http://localhost:3000/forgetPassword',
+            html: 'Dear Customer,<br> Please navigate to the link to reset your password http://happypaws-a2.herokuapp.com/forgetPassword',
         };
 
 
