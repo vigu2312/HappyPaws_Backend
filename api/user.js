@@ -35,7 +35,7 @@ exports.register = (req, res, next) => {
                         jwt.sign(
                             { id: user.id },
                             process.env.JWT_SECRET,
-                            { expiresIn: 3600 },
+                            { expiresIn: 7200 },
                             (err, token) => {
                                 if (err) throw err;
                                 const loggedInUser = new LoggedInUser({ token });
@@ -69,98 +69,98 @@ exports.login = (req, res, next) => {
 
         User.findOne({ email })
             .then(user => {
-                if (!user) return res.status(400).json({ msg: 'User does not exist' })
+                if (!user) return res.status(400).json({ msg: 'User does not exist', status: 400 })
+                if (user) {
 
-                bcrypt.compare(password, user.password)
-                    .then(isMatch => {
-                        console.log("match", isMatch, password, user.password)
-                        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' })
-                        // JWT token
-                        jwt.sign(
-                            { id: user.id },
-                            process.env.JWT_SECRET,
-                            { expiresIn: 3600 },
-                            (err, token) => {
-                                if (err) throw err;
-                                const loggedInUser = new LoggedInUser({ token });
-                                loggedInUser.save()
-                                res.status(200).json({
-                                    token,
-                                    user: {
-                                        id: user.id,
-                                        name: user.name,
-                                        email: user.email
-                                    }
-                                });
-                            }
-                        )
-                    })
+                    bcrypt.compare(password, user.password)
+                        .then(isMatch => {
+                            if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials', status: 400 })
+                            // JWT token
+                            jwt.sign(
+                                { id: user.id },
+                                process.env.JWT_SECRET,
+                                { expiresIn: 7200 },
+                                (err, token) => {
+                                    if (err) throw err;
+                                    const loggedInUser = new LoggedInUser({ token });
+                                    loggedInUser.save()
+                                    res.status(200).json({
+                                        token,
+                                        user: {
+                                            id: user.id,
+                                            name: user.name,
+                                            email: user.email
+                                        }
+                                    });
+                                }
+                            )
+                        })
+                }
+
             })
-
-
-
     } catch (err) {
         console.log(err)
     }
 }
 
 exports.userDetails = (req, res, next) => {
-    User.findById(req.user.id)
-        .select('-password')
-        .then(user => res.json(user));
+    try {
+        User.findById(req.user.id)
+            .select('-password')
+            .then(user => res.json(user));
+    } catch (e) {
+        console.log(e);
+        return res.status(400).json({ ststus: 400, msg: 'Something went wrong' })
+    }
+
 }
 
 exports.logout = (req, res, next) => {
-    LoggedInUser.findOneAndDelete({ token: req.token }, function (err) {
-        if (!err) {
-            res.status(200).json({ mssg: "OK", success: true });
-        }
-        else {
-            console.log(err);
-        }
-    });
+    try {
+        LoggedInUser.findOneAndDelete({ token: req.token }, function (err) {
+            if (!err) {
+                res.status(200).json({ mssg: "OK", success: true });
+            }
+            else {
+                console.log(err);
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(400).json({ ststus: 400, msg: 'Something went wrong' })
+    }
 
-    // jwt.verify(req.token, process.env.JWT_SECRET, (err, authData) => {
-    //     console.log(err);
-    //     if (err) res.status(403).json({
-    //         success: false
-    //     });
-    //     else {
-    //         req.logout();
-    //         res.status(200).json({
-    //             success: true
-    //         })
-    //     }
-    // })
+
 }
 exports.forgetPassword = (req, res, next) => {
     try {
-        const { password } = req.body;
-        if (!password) {
+        const { email, password } = req.body;
+        if (!email || !password) {
             return res.status(400).json({ msg: 'Please enter all the fields' });
         }
-        User.findOne({ _id: req.user.id })
+        User.findOne({ email })
             .then(user => {
-                if (!user) return res.status(400).json({ msg: 'User does not exist' })
+                if (!user) return res.status(400).json({ msg: 'User does not exist', status: 400 })
 
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(password, salt, (err, hash) => {
-                        if (err) throw err;
-                        const newPassword = hash;
+                if (user) {
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(password, salt, (err, hash) => {
+                            if (err) throw err;
+                            const newPassword = hash;
 
-                        User.findOneAndUpdate({ _id: req.user.id }, { $set: { password: newPassword } }, { new: true }, (err, doc) => {
-                            if (err) {
-                                console.log("Something wrong when updating data!");
-                            }
-                            return res.status(200).json({
-                                msg: "OK",
-                                success: true
-                            });
-                        })
+                            User.findOneAndUpdate({ email: user.email }, { $set: { password: newPassword } }, { new: true }, (err, doc) => {
+                                if (err) {
+                                    console.log("Something wrong when updating data!");
+                                }
+                                return res.status(200).json({
+                                    msg: "OK",
+                                    success: true
+                                });
+                            })
 
+                        });
                     });
-                });
-
+                }
             })
     } catch (error) {
 
@@ -168,7 +168,14 @@ exports.forgetPassword = (req, res, next) => {
 }
 
 exports.forgetPasswordMail = (req, res, next) => {
+
     const { email } = req.body
+
+    User.findOne({ email })
+        .then(user => {
+            if (!user) return res.status(400).json({ msg: 'User does not exist', status: 400 })
+        })
+
     try {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
         var transporter = nodemailer.createTransport(smtpTransport({
@@ -193,10 +200,15 @@ exports.forgetPasswordMail = (req, res, next) => {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
+                transporter.close();
+                return res.status(400).json({ ststus: 400, msg: 'Something went wrong' })
+
             } else {
                 console.log('Email sent: ' + info.response);
+                transporter.close();
+                return res.status(200).json({ status: 200, msg: 'OK' })
             }
-            transporter.close();
+
         });
     }
     catch (err) {
@@ -211,24 +223,29 @@ exports.editProfile = (req, res, next) => {
         if (!email || !name) {
             return res.status(400).json({ msg: 'Please enter all the fields' });
         }
-        User.findOne({ _id: req.user.id })
+        User.findOne({ email })
             .then(user => {
-                if (!user) return res.status(400).json({ msg: 'User does not exist' })
-
-                User.findOneAndUpdate({ _id: req.user.id }, { $set: { email: email, name: name } }, { new: true }, (err, doc) => {
-                    if (err) {
-                        console.log("Something wrong when updating data!");
-                    }
-                    return res.status(200).json({
-                        msg: "OK",
-                        success: true,
-                        user: {
-                            name: doc.email,
-                            name: doc.name
+                if (user) {
+                    return res.status(400).json({ msg: 'User already exists' })
+                }
+                if (!user) {
+                    User.findOneAndUpdate({ _id: req.user.id }, { $set: { email: email, name: name } }, { new: true }, (err, doc) => {
+                        if (err) {
+                            console.log("Something wrong when updating data!");
+                            return res.status(400).json({ success: false, })
                         }
-                    });
-                })
+                        return res.status(200).json({
+                            msg: "OK",
+                            success: true,
+                            user: {
+                                email: doc.email,
+                                name: doc.name
+                            }
+                        });
+                    })
+                }
             })
+
     } catch (error) {
 
     }
