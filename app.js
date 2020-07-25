@@ -11,7 +11,8 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const cors = require('cors');
 dotenv.config({ path: './config/config.env' });
-const path = require('path');
+
+ const path = require('path');
 
 // connecting to DB
 connectDB();
@@ -28,7 +29,7 @@ app.use(express.json());
 
 // calling the routes file
 app.use('/users', require('./routes/users'));
-app.use('/sharestory', require('./routes/shareyourstory'))
+app.use('/sharestory', require('./routes/shareyourstory'));
 app.use('/donation', require('./routes/donation'));
 app.use('/volunteer', require('./routes/volunteer.js'));
 app.use('/search', require('./api/search'));

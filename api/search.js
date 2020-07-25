@@ -8,20 +8,12 @@ const Pets= require('../models/pet-data');
 router.get('/', (req,res,next) => {
     Pets.find().then(pet => {
         if (pet) {
-            console.log("hit search"+pet);
             return res.status(200).json(pet);
         }
         else return res.status(502).json({})
     });
 });
 
-router.post('/viewpet', (req,res,next) => {
-    Pets.find().then(pet => {
-        if (pet) {console.log("dataaaaaaaa"+ req.body.id);return res.status(200).json({"msg":req.body.id});
-    }
-        else return res.status(502).json({"msg":"null"})
-    });
-});
 
 // fetch the specific pets by name, breed, type or color 
 router.get('/:keyword', (req,res,next) => {
