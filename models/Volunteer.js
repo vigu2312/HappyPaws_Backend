@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-//const Schema = mongoose.Schema;
 
 const VolunteerSchema = new mongoose.Schema({
     firstName: {
@@ -13,8 +12,9 @@ const VolunteerSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'Please add your Email ID'],
-        unique: true
+        unique:false
     },
+    
     contactNo: {
         type: String,
         required: [true, 'Please add your Phone Number']

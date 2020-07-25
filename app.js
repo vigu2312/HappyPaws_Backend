@@ -12,6 +12,7 @@ const path = require('path');
 // require('./middleware/passport')(passport);
 
 connectDB();
+ console.log("APP.js test")
 
 app.use(morgan('HappyPaws'));
 app.use(cors());
