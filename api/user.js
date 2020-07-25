@@ -1,3 +1,6 @@
+/************
+ * Author: Moni Shah 
+ **********/
 const User = require('../models/User');
 const LoggedInUser = require('../models/LoggedInUser')
 const bcrypt = require('bcryptjs');
@@ -6,7 +9,8 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
-// module.exports = (passport, jwt) => {
+
+// POST API call: for registering user
 exports.register = (req, res, next) => {
     try {
         const { name, email, password } = req.body;
@@ -59,6 +63,7 @@ exports.register = (req, res, next) => {
     }
 }
 
+// POST API call: for logging user
 exports.login = (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -103,6 +108,7 @@ exports.login = (req, res, next) => {
     }
 }
 
+// GET API call:Fetching user details
 exports.userDetails = (req, res, next) => {
     try {
         User.findById(req.user.id)
@@ -110,28 +116,31 @@ exports.userDetails = (req, res, next) => {
             .then(user => res.json(user));
     } catch (e) {
         console.log(e);
-        return res.status(400).json({ ststus: 400, msg: 'Something went wrong' })
+        return res.status(400).json({ status: 400, msg: 'Something went wrong' })
     }
 
 }
 
+// GET API CALL: for logout
 exports.logout = (req, res, next) => {
+
     try {
-        LoggedInUser.findOneAndDelete({ token: req.token }, function (err) {
-            if (!err) {
-                res.status(200).json({ mssg: "OK", success: true });
-            }
-            else {
-                console.log(err);
-            }
-        });
-    } catch (e) {
+        LoggedInUser.findOneAndDelete({ token: req.token })
+            .then(res => {
+                return res.status(200).json({ mssg: "OK", success: true });
+            }).catch(err => {
+                console.log(err)
+                return res.status(400).json({ status: 400, msg: 'Something went wrong' })
+            })
+    } catch (err) {
         console.log(e);
-        return res.status(400).json({ ststus: 400, msg: 'Something went wrong' })
+        return res.status(400).json({ status: 400, msg: 'Something went wrong' })
     }
 
 
 }
+
+// PUT API CALL : Forget password method
 exports.forgetPassword = (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -167,6 +176,7 @@ exports.forgetPassword = (req, res, next) => {
     }
 }
 
+// POST API CALL: sending mail to reset a new password
 exports.forgetPasswordMail = (req, res, next) => {
 
     const { email } = req.body
@@ -193,7 +203,7 @@ exports.forgetPasswordMail = (req, res, next) => {
             from: 'happypaws5709@gmail.com',
             to: email,
             subject: 'Reset your password : HappyPaws ',
-            html: 'Dear Customer,<br> Please navigate to the link to reset your password http://localhost:8080/forgetPassword',
+            html: 'Dear Customer,<br> Please navigate to the link to reset your password http://localhost:3000/forgetPassword',
         };
 
 
@@ -217,6 +227,7 @@ exports.forgetPasswordMail = (req, res, next) => {
 
 };
 
+// PUT API CALL: to update Edit profile
 exports.editProfile = (req, res, next) => {
     try {
         const { email, name } = req.body;
@@ -250,5 +261,3 @@ exports.editProfile = (req, res, next) => {
 
     }
 }
-    // return exports;
-// }

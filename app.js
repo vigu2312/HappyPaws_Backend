@@ -1,3 +1,7 @@
+/************
+ * Author: Moni Shah 
+ **********/
+
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -9,18 +13,20 @@ const cors = require('cors');
 dotenv.config({ path: './config/config.env' });
 const path = require('path');
 
+// connecting to DB
 connectDB();
  console.log("APP.js test")
 
 app.use(morgan('HappyPaws'));
+
+// Adding cors configuration
 app.use(cors());
 
+// For parsing json data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(passport.initialize());
-app.use(passport.session());
-
+// calling the routes file
 app.use('/users', require('./routes/users'));
 app.use('/sharestory', require('./routes/shareyourstory'))
 app.use('/donation', require('./routes/donation'));
