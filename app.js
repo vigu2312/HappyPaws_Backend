@@ -9,8 +9,6 @@ const cors = require('cors');
 dotenv.config({ path: './config/config.env' });
 const path = require('path');
 
-// require('./middleware/passport')(passport);
-
 connectDB();
  console.log("APP.js test")
 
@@ -27,16 +25,9 @@ app.use('/users', require('./routes/users'));
 app.use('/sharestory', require('./routes/shareyourstory'))
 app.use('/donation', require('./routes/donation'));
 app.use('/volunteer', require('./routes/volunteer.js'));
+app.use('/search', require('./api/search'));
+app.use('/profile', require('./routes/profile-routes.js'));
+app.use('/enquiry',require('./routes/enquiry.js'));
 app.get('/', (req, res) => res.send("Hello"));
 
 module.exports = app;
-
-// app.use(express.static('../FrontEnd/', {index: 'index.html'}));
-
-// app.get('/*', function (req, res) {
-//   res.sendFile(path.join(__dirname + './FrontEnd/build/index.html'));
-// });
-
-// const PORT = process.env.PORT || 5000;
-
-// app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} on port ${PORT}`));
