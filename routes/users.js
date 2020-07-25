@@ -9,7 +9,7 @@ const User = require('../models/User');
 router.route('/register').post(register);
 router.route('/login').post(login);
 router.route('/userDetails').get(auth, userDetails);
-router.route('/forgetPassword').put(auth, forgetPassword);
+router.route('/forgetPassword').put(forgetPassword);
 router.route('/forgetPasswordMail').post(forgetPasswordMail);
 router.route('/editProfile').put(auth, editProfile);
 router.route('/logout').get(auth, logout);
