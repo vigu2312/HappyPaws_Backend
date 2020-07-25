@@ -10,6 +10,7 @@ dotenv.config({ path: './config/config.env' });
 const path = require('path');
 
 connectDB();
+ console.log("APP.js test")
 
 app.use(morgan('HappyPaws'));
 app.use(cors());
@@ -23,6 +24,7 @@ app.use(passport.session());
 app.use('/users', require('./routes/users'));
 app.use('/sharestory', require('./routes/shareyourstory'))
 app.use('/donation', require('./routes/donation'));
+app.use('/volunteer', require('./routes/volunteer.js'));
 app.use('/search', require('./api/search'));
 app.use('/profile', require('./routes/profile-routes.js'));
 app.use('/enquiry',require('./routes/enquiry.js'));
