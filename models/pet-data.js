@@ -1,5 +1,10 @@
+/**
+ * @author: Bhagyashree
+ */ 
+
 const mongoose= require('mongoose');
 
+// Data model for storing Pets
 const petSchema= mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: String,

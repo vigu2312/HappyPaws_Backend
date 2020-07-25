@@ -1,4 +1,9 @@
-const express = require('express');
+/**
+ * @author: Moni
+ * @author: Bhagyashree
+ */ 
+
+ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const connectDB = require('./config/db');
@@ -7,14 +12,16 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const cors = require('cors');
 dotenv.config({ path: './config/config.env' });
-const path = require('path');
+
+ const path = require('path');
 
 // require('./middleware/passport')(passport);
 
 connectDB();
 
 app.use(morgan('HappyPaws'));
-app.use(cors());
+//app.use(cors())
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
