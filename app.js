@@ -34,6 +34,7 @@ app.use('/volunteer', require('./routes/volunteer.js'));
 app.use('/search', require('./api/search'));
 app.use('/profile', require('./routes/profile-routes.js'));
 app.use('/enquiry',require('./routes/enquiry.js'));
+app.use('/sponsor', require('./routes/sponsor.js'));
 app.get('/', (req, res) => res.send("Hello"));
 
 module.exports = app;
