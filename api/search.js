@@ -1,6 +1,3 @@
-/**
- * @author: Bhagyashree
- */ 
 const express= require('express');
 const router=express.Router();
 const mongoose= require('mongoose');
@@ -17,7 +14,8 @@ router.get('/', (req,res,next) => {
     });
 });
 
-// fetch the specific pets by name, breed, type or color from the search field
+
+// fetch the specific pets by name, breed, type or color 
 router.get('/:keyword', (req,res,next) => {
     const keyword= req.params.keyword;
     Pets.find({$or: [ {"name":keyword}, {"breed":keyword}, {"type":keyword}, {"color":keyword}]}).then(pet => {
@@ -27,7 +25,6 @@ router.get('/:keyword', (req,res,next) => {
 });
 
 // add a new pet to the database
-// This API will not be accessible by users. Only the developers will be able to add the pets using Postman or similar framework
 router.post('/', (req,res,next) => {
     const pet= new Pets({
         _id: new mongoose.Types.ObjectId(),
