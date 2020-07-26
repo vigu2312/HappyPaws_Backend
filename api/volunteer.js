@@ -1,4 +1,8 @@
-const Events = require('../models/Events');
+/************
+ * Author: Vigneshwari Ravichandran
+ **********/
+
+ const Events = require('../models/Events');
 const Volunteer = require('../models/Volunteer');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
@@ -6,6 +10,7 @@ const smtpTransport = require('nodemailer-smtp-transport');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
+//get api call to get the list of volunteer events at HappyPaws
     exports.volFn = (req, res, next) => {
             Events.find()
             .then(eventList=>{
@@ -15,6 +20,8 @@ const fs = require('fs');
             });
     };
 
+    
+    //post api call to register a user to volunteer event 
     
     exports.VolunteerRegister = (req, res, next) => {
         var today = new Date();

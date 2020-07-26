@@ -1,5 +1,11 @@
-const mongoose= require('mongoose');
+/************
+ * Author: Bhagyashree Pandit
+ * Author: Ramya Ramathas
+ **********/
 
+ const mongoose= require('mongoose');
+
+ //schema
 const petSchema= mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: String,

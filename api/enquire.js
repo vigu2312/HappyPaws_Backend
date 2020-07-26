@@ -1,4 +1,8 @@
-const nodemailer = require('nodemailer');
+/************
+ * Author: Ramya Ramathas
+ **********/
+
+ const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 const mongoose= require('mongoose');
 
@@ -18,7 +22,7 @@ exports.petInfo = (req,res) => {
     
 };
 
-// add enquiry 
+// post api call for sending the enquiry
 exports.petEnquire = (req, res, next) => {
 
     const enquire= new Enquiry({
