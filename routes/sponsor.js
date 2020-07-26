@@ -4,8 +4,10 @@ const auth = require('../middleware/auth');
 const {sponsor, sponsorInfo} = require('../api/sponsor');
 // const {sponsorInfo} = require('../api/sponsor');
 
-console.log("Inside Routes")
+// POST Route
 router.route('/').post(sponsor);
+
+//GET Route
 router.route('/:id').get(sponsorInfo);
 
 

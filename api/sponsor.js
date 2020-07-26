@@ -4,7 +4,10 @@ const Pets = require('../models/pet-data');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+// Get API
 exports.sponsorInfo = (req, res) => {
+    // Fetch pet information from Mongo based on the passed ID
     const id = req.params.id;
     console.log("ID is " , id)
     Pets.findOne({ _id: id })
@@ -27,7 +30,7 @@ exports.sponsorInfo = (req, res) => {
 
 
 
-
+// POST API
 exports.sponsor = (req, res, next) => {
 
     console.log("Inside Backend API")
@@ -38,12 +41,8 @@ exports.sponsor = (req, res, next) => {
     if (!email || !cardNumber || !cvc || !expiry || !name || !address1 || !city || !postalCode || !state) {
         return res.status(400).json({ msg: 'Please enter all the fields' });
     }
-    // User.findOne({ email })
-    //     .then(user => {
-    //         if (!user) return res.status(400).json({ msg: 'No such email exists' })
-    //         console.log("Inside here")
-    //     })
-
+    
+    // Creating model to store data in MongoDB
     const sponsor = new Sponsor({
         email, cardNumber, cvc, expiry, name, address1, city, postalCode, state
     })
