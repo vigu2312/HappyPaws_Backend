@@ -1,3 +1,11 @@
+/************
+ * Author: Moni Shah 
+ * Author: Vigneshwari Ravichandran
+ * Author: Ramya Ramathas
+ * Author: Devam Shah
+ * Author: Bhagyashree Pandit  
+ **********/
+
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -7,34 +15,31 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const cors = require('cors');
 dotenv.config({ path: './config/config.env' });
-const path = require('path');
 
-// require('./middleware/passport')(passport);
+ const path = require('path');
 
+// connecting to DB
 connectDB();
+ console.log("APP.js test")
 
 app.use(morgan('HappyPaws'));
+
+// Adding cors configuration
 app.use(cors());
 
+// For parsing json data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(passport.initialize());
-app.use(passport.session());
-
+// calling the routes file
 app.use('/users', require('./routes/users'));
-app.use('/sharestory', require('./routes/shareyourstory'))
+app.use('/sharestory', require('./routes/shareyourstory'));
 app.use('/donation', require('./routes/donation'));
+app.use('/volunteer', require('./routes/volunteer.js'));
+app.use('/search', require('./api/search'));
+app.use('/profile', require('./routes/profile-routes.js'));
+app.use('/enquiry',require('./routes/enquiry.js'));
+app.use('/sponsor', require('./routes/sponsor.js'));
 app.get('/', (req, res) => res.send("Hello"));
 
 module.exports = app;
-
-// app.use(express.static('../FrontEnd/', {index: 'index.html'}));
-
-// app.get('/*', function (req, res) {
-//   res.sendFile(path.join(__dirname + './FrontEnd/build/index.html'));
-// });
-
-// const PORT = process.env.PORT || 5000;
-
-// app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} on port ${PORT}`));

@@ -1,11 +1,15 @@
+/************
+ * Author: Moni Shah 
+ **********/
+
+ // Authentication 
 const jwt = require('jsonwebtoken');
 const LoggedInUser = require('../models/LoggedInUser');
 
-
+// auth function to check the token in valid or not. Check whether it has headers or not.
 function auth(req, res, next) {
     const token = req.header('x-auth-token');
     req.token = token;
-    // Check for token
     if (!token) {
         return res.status(401).json({ msg: 'No token. Authorization denied' });
     }
@@ -18,21 +22,13 @@ function auth(req, res, next) {
             }
           }).catch(err => {
             console.log(err);
-            return;
+            return res.status(400).json({ success: false, })
           });
-          
-        // LoggedInUser.findOne({token}, function(err, result) {
-        //     if (!result) {
-        //         return  res.status(400).json({msg: 'Unvalid token'});
-        //     }
-        // })
     }
 
     try {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Add user from payload
         req.user = decoded;
         next();
     } catch (err) {
