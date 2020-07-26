@@ -1,5 +1,10 @@
-const mongoose = require('mongoose');
+/************
+ * Author: Vigneshwari Ravichandran
+ **********/
 
+ const mongoose = require('mongoose');
+
+ //schema
 const VolunteerSchema = new mongoose.Schema({
     firstName: {
         type: String,
