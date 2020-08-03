@@ -126,8 +126,8 @@ exports.logout = (req, res, next) => {
 
     try {
         LoggedInUser.findOneAndDelete({ token: req.token })
-            .then(res => {
-                return res.status(200).json({ mssg: "OK", success: true });
+            .then(result => {
+                return res.status(200).json({ mssg: "OK", success: true })
             }).catch(err => {
                 console.log(err)
                 return res.status(400).json({ status: 400, msg: 'Something went wrong' })

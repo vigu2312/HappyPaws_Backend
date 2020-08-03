@@ -26,7 +26,6 @@ app.use(morgan('HappyPaws'));
 
 // Adding cors configuration
 app.use(cors());
-
 // For parsing json data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -40,6 +39,9 @@ app.use('/search', require('./api/search'));
 app.use('/profile', require('./routes/profile-routes.js'));
 app.use('/enquiry',require('./routes/enquiry.js'));
 app.use('/sponsor', require('./routes/sponsor.js'));
+app.use('/petCare', require('./routes/petCare.js'));
+app.use('/userProfile', require('./routes/userProfile'));
+
 app.get('/', (req, res) => res.send("Hello"));
 
 module.exports = app;
