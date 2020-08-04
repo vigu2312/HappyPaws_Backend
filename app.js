@@ -35,6 +35,7 @@ app.use('/users', require('./routes/users'));
 app.use('/sharestory', require('./routes/shareyourstory'));
 app.use('/donation', require('./routes/donation'));
 app.use('/volunteer', require('./routes/volunteer.js'));
+app.use('/adopt', require('./routes/adopt.js'));
 app.use('/search', require('./api/search'));
 app.use('/profile', require('./routes/profile-routes.js'));
 app.use('/enquiry',require('./routes/enquiry.js'));
