@@ -1,3 +1,7 @@
+/************
+ * Author: Devam Shah 
+ **********/
+
 const mongoose = require('mongoose');
 
 //Create Schema
