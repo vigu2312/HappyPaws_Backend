@@ -41,6 +41,7 @@ app.use('/enquiry',require('./routes/enquiry.js'));
 app.use('/sponsor', require('./routes/sponsor.js'));
 app.use('/petCare', require('./routes/petCare.js'));
 app.use('/userProfile', require('./routes/userProfile'));
+app.use('/contactus',require('./routes/contactUs.js'));
 
 app.get('/', (req, res) => res.send("Hello"));
 
