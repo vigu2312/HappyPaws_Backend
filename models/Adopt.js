@@ -6,14 +6,7 @@ const mongoose = require('mongoose');
 
 //schema
 const AdoptSchema = new mongoose.Schema({
-//    firstName: {
-//        type: String,
-//        required: [true, 'Please add your First Name']
-//    },
-//    lastName: {
-//        type: String,
-//        required: [true, 'Please add your Last Name']
-//    },
+
    email: {
        type: String,
        required: [true, 'Please add your Email ID'],

@@ -8,10 +8,6 @@ const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
-//get api call 
-    // exports.adoptTest = (req, res, next) => {
-    //        res.send("Adopt a Pet");
-    // };
 
     //fetch the pet information from the database based on id and send it to frontend
     exports.petInfoAdopt = (req,res) => {
