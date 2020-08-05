@@ -16,10 +16,7 @@ exports.share = (req, res, next) => {
         if ( !email || !story) {
             return res.status(400).json({ msg: 'Please enter all the fields' });
         }
-        // User.findOne({ email })
-        //     .then(user => {
-        //         if (!user) return res.status(400).json({ msg: 'No such email exists' })
-        //     })
+       
         const newStory = new Story({
            email, story
         })
