@@ -1,7 +1,11 @@
+/************
+ * Author: Devam Shah
+ **********/
 const UserProfile = require('../models/UserProfile');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
+//post api to update user info
 exports.aboutMe = (req, res, next) => {
     const data = req.body
     console.log(data)
@@ -45,13 +49,11 @@ exports.aboutMe = (req, res, next) => {
     }).catch((error) => {
         console.log("Error is ", error)
     })
-
-
-
-    //    
+   
 
 }
 
+//get api to fetch stored user info
 exports.fetchAboutMe = (req, res, next) => {
     console.log("inside GET")
     console.log(req.query.userId)
@@ -66,11 +68,14 @@ exports.fetchAboutMe = (req, res, next) => {
 
 }
 
+
+
 exports.accountSettings = (req, res) => {
     console.log(req.body)
 }
 
 
+//api to update password
 exports.accountSettings = (req, res) => {
     console.log(req.body)
     const userId = req.body.userID

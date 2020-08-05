@@ -5,14 +5,9 @@
 const mongoose = require('mongoose');
 const PetCare = require('../models/petCare');
 
-
+//api to sample 3 random pet types
 exports.petCare = (req, res) => {
-    // Fetch pet information from Mongo based on the passed ID
-    // PetCare.find().then(petCare => {
-    //     if(petCare) {
-    //     console.log(petCare)
-    //     }
-    // })
+  
 
 
     SelectedPets = {}
@@ -23,16 +18,6 @@ exports.petCare = (req, res) => {
     
 
 
-    // Pets.findOne({ _id: id })
-    //     .then(pet => {
-    //         if (pet) {
-    //             console.log("Inside Success")
-    //             return res.status(200).json(pet)
-
-    //         }
-    //         else {
-    //             return res.status(502).json({})
-    //         }
-    //     });
+  
 
 };

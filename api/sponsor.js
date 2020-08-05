@@ -25,11 +25,6 @@ exports.sponsorInfo = (req, res) => {
 };
 
 
-
-
-
-
-
 // POST API
 exports.sponsor = (req, res, next) => {
 

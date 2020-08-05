@@ -14,6 +14,5 @@ const adopt = require('../models/Adopt');
 //routes for adopt page
 router.route('/adopt').post(auth,AdoptRegister);
 router.route('/:id').get(petInfoAdopt);
-//router.route('/').get(adoptTest);
 
 module.exports = router;
